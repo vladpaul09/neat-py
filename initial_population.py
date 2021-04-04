@@ -17,10 +17,7 @@
 from random import uniform
 
 from data_struct.species import Species
-from data_struct.population import Population
-from data_struct.genome import Genome
-from data_struct.nodegene import NodeGene
-from data_struct.connection_gene import ConnectionGene
+from data_struct.population import Population, Genome, NodeGene, ConnectionGene
 from data_struct.innovation_record import InnovationRecord
 
 def initial_population(pop_nr, input_nr, output_nr, vector_connected_input_nodes, speciation):
@@ -89,7 +86,7 @@ def initial_population(pop_nr, input_nr, output_nr, vector_connected_input_nodes
     # species reference matrix (abbreviated, only weights, since there are no topology differences in initial population)
     matrix_reference_individuals_weighs=[[population.genomes[0].connections[i].weight for i in range(number_connections)]]
     species_record = []
-    species_record.append(Species(id=1, number_individuals=1, generation_record=[]))
+    species_record.append(Species(id=1, number_individuals=1, generations_record=[]))
 
     # Loop through rest of individuals and either assign to existing species or create
     # new species and use first individual of new species as reference
@@ -120,7 +117,7 @@ def initial_population(pop_nr, input_nr, output_nr, vector_connected_input_nodes
             population.genomes[index_individual].species = index_species
             matrix_reference_individuals_weighs.append([population.genomes[index_individual].connections[i].weight for i in range(number_connections)])
             # if number individuals in a species is zero, that species is extinct
-            species_record.append(Species(id=index_species, number_individuals=1, generation_record=[]))
+            species_record.append(Species(id=index_species, number_individuals=1, generations_record=[]))
 
 
     return population, innovation_record_list, species_record

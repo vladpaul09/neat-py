@@ -1,6 +1,8 @@
 from math import exp
 
-def nn_feedforward(individual, number_nodes, number_connections, state_input):
+def nn_feedforward(individual, state_input):
+    number_nodes = len(individual.nodes)
+    number_connections = len(individual.connections)
     # Input number + bias node
     input_nr = individual.input_nr + 1
     output_nr = individual.output_nr

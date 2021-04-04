@@ -1,6 +1,6 @@
 from initial_population import initial_population
-from data_struct.speciation import speciation
-from pprint import pprint
+from stagnation_and_refocus_check import stagnation_and_refocus_check
+from parameters import speciation, stagnation, refocus
 
 class Neat(object):
     def __init__(
@@ -12,7 +12,9 @@ class Neat(object):
         max_overall_fitness=[],
         vector_connected_input_nodes=[],
         population_size=150,
-        max_generations=200,
+        speciation=speciation(),
+        stagnation=stagnation(),
+        refocus=refocus(),
         load_flag=0,
         save_flag=1
     ):
@@ -29,12 +31,23 @@ class Neat(object):
         self.vector_connected_input_nodes = vector_connected_input_nodes
 
         self.population_size = population_size
-        self.max_generations = max_generations
         self.load_flag = load_flag
         self.save_flag = save_flag
 
-        self.speciation = speciation()
+        self.speciation = speciation
+        self.stagnation = stagnation
+        self.refocus = refocus
 
-        self.population, self.innovation_record_list, self.species_record = initial_population(population_size, number_input_nodes, number_output_nodes, vector_connected_input_nodes, self.speciation)
+        self.population, self.innovation_record_list, self.species_record = initial_population(population_size, number_input_nodes, number_output_nodes, vector_connected_input_nodes, speciation)
         self.generation = 1
-        
+
+    def ask(self):
+        return self.population
+
+    def tell(self, fitness_list):
+        for i in range(self.population_size):
+            self.population.genomes[i].fitness = fitness_list[i]
+        stagnation_and_refocus_check(self.population, self.species_record, self.stagnation, self.refocus)
+
+
+        return self.population
